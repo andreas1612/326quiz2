@@ -60,3 +60,26 @@ python3 epl326_solver_telos.py puzzle 123456 /path/to/extracted/quiz/folder
 ```
 
 Good luck on the new quiz!
+
+## Group E Specifics (18:00 Exam)
+
+The new Group E format introduces an `RC4_key.enc` file in the decryption chain, replacing the direct AES problem decryption with an intermediate step.
+
+### Changes & Comparison:
+1. **Passphrase**: Same (SHA-256 or SHA-512 Hash cracking).
+2. **AES ZIP**: The `aes_key_protected.zip` is unlocked using the passphrase (Same).
+3. **Private Key**: `private key.enc` is decrypted using the **Passphrase** or **AES Key** (new variation).
+4. **RC4 Key (NEW)**: `RC4_key.enc` is decrypted via RSA using the unlocked private key.
+5. **Problem Decryption**: `problem_file.enc` is decrypted using the **RC4 Key** (or sometimes AES key).
+6. **Final Tokens**: 
+   - Token 1 (11 chars) from `details.txt`
+   - Token 2 (10 chars) from unzipping AES key or RC4 key
+   - Token 3 (9 digits) from decrypting RC4 key or passphrase
+   - Token 4 (10 chars) hidden in the final `problem_file.enc` plaintext
+
+We have added a custom tailored script `solve_group_e.py` specifically for this exact structure to instantly solve it.
+
+### Usage for Group E:
+```bash
+python3 solve_group_e.py /path/to/extracted/quiz/folder
+```

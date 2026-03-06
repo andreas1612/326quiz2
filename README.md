@@ -83,3 +83,16 @@ We have added a custom tailored script `solve_group_e.py` specifically for this 
 ```bash
 python3 solve_group_e.py /path/to/extracted/quiz/folder
 ```
+
+## Update: March 6, 2026 Quiz (OpenSSL 3 Compatibility)
+During the quiz on March 6, 2026, we discovered that `problem_file.enc` was encrypted with RC4 without a `Salted__` magic magic number, and required the legacy RC4 provider in OpenSSL 3.
+
+If you are using a modern machine (Ubuntu 22.04+ / OpenSSL 3+), standard RC4 decryption fails with a `bad magic number` or `unsupported` algorithm error.
+
+To decrypt the final problem file in this format, you must use the legacy provider and `-nosalt` flags:
+```bash
+openssl enc -d -rc4 -provider legacy -provider default -nosalt -in problem_file.enc -pass pass:<RC4_KEY>
+```
+*Note: The `solve_group_e.py` script has been updated to automatically try these flags behind the scenes.*
+
+The final token for this date used a **Double Caesar** shift (e.g., shifting the plaintext by 10/16 positions to find an English sentence).

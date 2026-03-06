@@ -5,7 +5,7 @@ import subprocess
 import glob
 import re
 
-ID = "1366653"
+ID = "1366653" # Default, will be overridden by folder name
 
 # 1. Caesar / Vigenere Decryptor (from telos)
 def score_text(text):
@@ -142,12 +142,22 @@ def decrypt_problem(problem_path, rc4_key, aes_key, passphrase):
     # It could be encrypted via RC4 or AES. Let's try RC4 first since the key is named RC4_key.enc 
     if rc4_key:
         print("  -> Trying RC4 decryption...")
-        r = subprocess.run(['openssl', 'enc', '-d', '-rc4', '-pass', f'pass:{rc4_key}', '-in', problem_path, '-out', out_path], capture_output=True)
-        if r.returncode == 0 and os.path.exists(out_path):
-            data = open(out_path, 'r', errors='replace').read()
-            if len(data) > 5:
-                print(f"  ✓ RC4 Decryption successful! First 50 chars: {data[:50]}")
-                return data
+        for cmd_opts in [
+            [], # standard OpenSSL 1.1 fallback
+            ['-provider', 'legacy', '-provider', 'default'], # OpenSSL 3 default
+            ['-provider', 'legacy', '-provider', 'default', '-nosalt'], # OpenSSL 3 legacy with no salt (Today's quiz format)
+            ['-nosalt'] # OpenSSL 1.1 with no salt
+        ]:
+            cmd = ['openssl', 'enc', '-d', '-rc4'] + cmd_opts + ['-pass', f'pass:{rc4_key}', '-in', problem_path, '-out', out_path]
+            r = subprocess.run(cmd, capture_output=True)
+            if r.returncode == 0 and os.path.exists(out_path):
+                try:
+                    data = open(out_path, 'r', errors='replace').read()
+                    if len(data) > 5 and score_text(data) > -5: # Score could be low if it's double encrypted, but len check helps
+                        print(f"  ✓ RC4 Decryption successful with options {' '.join(cmd_opts) if cmd_opts else 'default'}! First 50 chars: {data[:50]}")
+                        return data
+                except Exception:
+                    pass
 
     if aes_key:
         print("  -> Trying AES decryption...")
@@ -187,7 +197,9 @@ def main():
     # 2. Crack Hash -> Passphrase
     passphrase = None
     if os.path.exists(files['hash']):
-        passphrase = crack_passphrase(files['hash'], ID)
+        folder_id = os.path.basename(folder)
+        current_id = folder_id if folder_id.isdigit() else ID
+        passphrase = crack_passphrase(files['hash'], current_id)
         
     # 3. Unzip AES
     aes_key = None

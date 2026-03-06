@@ -1,0 +1,16 @@
+# Final Extracted Tokens (ID: 1070143)
+
+- **Token 1 (11 chars)** [Passphrase from SHA-512 Hash]: `10701432236`
+- **Token 2 (10 chars)** [AES Key from ZIP Unlocking]: `2445210380`
+- **Token 3 (9 digits)** [RC4 Key from RSA Decryption]: `666695929`
+- **Token 4 (10 chars)** [Final text from Problem File - Caesar shift +15]: `qobpxvajrr` (raw: `bzmaiglucc`)
+
+**Explanation:**
+The solver script seamlessly executed all steps:
+1. Passphrase hash matched `10701432236`.
+2. Unzipped `aes_key_protected.zip` -> `2445210380`.
+3. Unlocked `private_key.enc` and `RC4_key.enc` -> `666695929`.
+4. Decoded `problem_file.enc` using the newly added OpenSSL 3 legacy+nosalt flags, which gave:
+`nzyrclefwletzyd jzf dfnnpddqfwwj dzwgpo esp afkkwp / esp qtylw ezvpy td bzmaiglucc`
+Applying a Caesar shift of +15 translates it perfectly to:
+`congratulations you successfully solved the puzzle / the final token is qobpxvajrr`

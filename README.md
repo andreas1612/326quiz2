@@ -84,6 +84,20 @@ We have added a custom tailored script `solve_group_e.py` specifically for this 
 python3 solve_group_e.py /path/to/extracted/quiz/folder
 ```
 
+### Update: Universal Solver (March 6, 2026)
+The toolkit has been upgraded to handle both the **Standard Symmetric** and **New Asymmetric (RSA)** quiz variations automatically.
+
+**Usage:**
+```bash
+python3 solve_group_e.py <folder_path>
+```
+
+**Key Features:**
+- **Auto-Hashing**: Detects SHA-256 vs SHA-512 for passphrases.
+- **Robust Key Chain**: Automatically handles encrypted ZIPs or `AES_key.enc` files.
+- **Smart Decryption**: Uses word-scoring and file signatures to decide between RSA and Symmetric decryption for the final `problem_file.enc`.
+- **Integrated Cracking**: Automatically performs Caesar and Vigenere brute-forcing on the final result to reveal Token 4.
+
 ## Update: March 6, 2026 Quiz (OpenSSL 3 Compatibility)
 During the quiz on March 6, 2026, we discovered that `problem_file.enc` was encrypted with RC4 without a `Salted__` magic magic number, and required the legacy RC4 provider in OpenSSL 3.
 

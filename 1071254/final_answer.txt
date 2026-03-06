@@ -2,14 +2,40 @@
 
 - **Token 1 (11 chars)** [Passphrase from SHA-256 Hash]: `10712547088`
 - **Token 2 (10 digits)** [AES Key from AES_key.enc via RC4]: `9546535265`
-- **Token 3 (9 digits)**: *Not found in this specific quiz variation.*
-- **Token 4 (10 chars)** [Final text from Problem File - Vigenere shift]: `wzwcriiika` (or possibly `xc` depending on interpretation)
+- **Token 3 (1674 chars)** [RSA Private Key from private_key.enc decryption]:
+-----BEGIN RSA PRIVATE KEY-----
+MIIEogIBAAKCAQEAyH1w1D1g0x1SgrT9UHiluHEhWeBJaCHh39EfmwLOC8Jupdw3
+1z+E3dDjQVDBdK1FG/PVp8OrQWgI5oO4cor3oqYpXLrKkBZhLPC3lIBegTKlGZp4
+YqC8eDqkaUWMzNHxTRBEBYAgN3b0bfWAhXQitaOn06IdwAh9T9BN0qGPUJ4u+qWR
+0fTCxoXgpWdr7xD2LdDU1v7UyeMMZeHMO5qvkuOz6FWZhMZYPEM6frfaX7TKnGuu
+w0WOgydFFIo7hWXsK13JNZdu1lB0R15PmNJS9lY5+QmSdMP25xzQHuEuKw3+vfwz
+bgBxa7QmJtBubqcV2YJ/s9Yvlv4MMviP6hFU6wIDAQABAoIBABHUwj+sgJuJUvwB
+mW2NeJbpjODmJz3/lKWBmMq1dA2ssO2Ub+z3a8HUoOZl7Pnx3SC9NEZG8a8pnKNv
+zJ93VGRSKRr9S/DtSwUI5bLriQj7MAVE06pZISbQqsW05CH+4nPYDsyuCaKuzdKn
+w1LBmPXhqvzFQT/oIWKc8Qb0mOWMLshV9Q1Ip1cCLwPJWWu3wZAWbdQyKZ/Rvd9F
+KQ9FmXdRXd+rbCuaklg+cVhjSvtvEqFMfWL69iJpr0WNdWK4aG5QCUMdsNEN2CO7
+8FvzF1TxQJjUMFsGKpPSvXxFsBXZpBF+iwRXoWBBlqdD5UXr31k3WeDnnM2BkB0V
+SN4zow0CgYEAz80SZ2hWzI5lyuQ9uYQrK1zBKb+a0OUVn4stCqlvp9Cu3bDF/7Iq
+8ATh6QlwOuDeBGOXvaWtzbZoRNJ2eTArYjxZInVgvkBGBJ9RCfxtbTT7/qLHpyF8
+1oHRKruXCQD17KWm6z+sbxeJptcB8qc7cOz9dZm54KPyDyVvA29ym1cCgYEA9v4/
+qPRth43duE01rZwV15z54ysISCEtXIGtdskz0BEInQ6iybwIz6lt6AQ/mZ0Cj3IJ
+ukgz0wco306nm3tQACQCg3eVjo3wavm4ABgJhYB3Ab/DoXEGOHpRy2eskHcV73HN
+pDecY7JqshTjq0vCkZ3tnVkF2Nm5RZ7w38VGqo0CgYAc436Wf6vpfjZqkXZ/Tv+N
+ZLS58Bg+yEpMRtX5MHsEUn+s9EFifct4WMVrV1OR6+cRpyLWS60w9xXh03yC9o5h
+dtBReQ39BQR26gsjH0O7Ne1+hfTJqF8plxyUG0YxC0AlKRZeiBiZzSTm2+c6a8NY
+vKmz6q4rq78gGe0oBhthuwKBgGnxjr7a8WxWlscqHx8zt06/35Pobmn6CSoH2a79
+CMNzuv0bPQpJJIJmi2UdBWbPqTx8Tt3fgJNBG/AFHfGcSCl3SLi5f6YhDgHk0V8A
+8HyaKPHQHorOHzv0g8c61hM1cWw+pVWOIP/GlOuD+FAOdAvf8P8wI0jrwwOw9GMX
+jIM1AoGAGkQERmuCj1BedFF5SuqqhPVSA5jH+wDAvPNHfZPC29HQCl04gLoOJLEE
+PG1DHJNrRpxx7z4lr6h/7xyXwh/W2zJSFwXXSK6g+ScYJ83Yup7Eeve1ALcdvUOO
+ixJoB2Bp9Ulsk28SrGaXVJ2oCFjJATmQw2wjknU9ygaWmJpSKTE=
+-----END RSA PRIVATE KEY-----
+- **Token 4 (10 chars)** [Final Vigenere-decoded token]: `wzwcriiika`
 
 **Explanation:**
-1. Passphrase hash matched `10712547088` (SHA-256).
-2. Found `AES_key.enc` instead of a ZIP file or `RC4_key.enc`. Decrypted `AES_key.enc` using RC4 with the legacy/nosalt OpenSSL 3 flags and the passphrase, which gave the AES key: `9546535265`.
-3. Decrypted `private_key.enc` using AES-256-CBC PBKDF2 with the recovered AES key.
-4. Unlocked `problem_file.enc` with the decrypted RSA private key, giving the ciphertext:
-`zqkiocqwicqklpp alw pwzebuphrnia pqixbf qjb rrbwnb veg ckkci vlmbp fu tbteokfkhc`
-5. The hints in `details.txt` specified "vigenere". Running a Vigenere solver over the text yielded a score of 4 with the key `xc`. The decoded text is:
-`congratulations you successfully solved the puzzle the final token is wzwcriiika`
+1. SHA-256 hash matched passphrase: 10712547088
+2. RC4-decrypted AES_key.enc with passphrase → AES key: 9546535265
+3. AES-256-CBC-PBKDF2-decrypted private_key.enc with AES key → RSA Private Key (Token 3, ~1674 chars)
+4. RSA-decrypted problem_file.enc with private key → Vigenere ciphertext:
+   zqkiocqwicqklpp alw pwzebuphrnia pqixbf qjb rrbwnb veg ckkci vlmbp fu tbteokfkhc
+5. Vigenere key=xc → Final token is: wzwcriiika

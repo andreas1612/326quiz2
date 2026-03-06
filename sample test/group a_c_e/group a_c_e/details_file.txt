@@ -1,0 +1,1 @@
+reveal the magic passphrase and use it to unlock the asymmetric key stop the passphrase is your id concatenated with three magic digits stop the passphrase is stored hashed in your files stop sha five one two stop decrypt it first stop then crack it stop when needed cipher mode of operation is cipher block chaining stop Password Based Key Derivation Function Two

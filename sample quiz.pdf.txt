@@ -1,0 +1,35 @@
+Cryptographic Puzzle : Warm -up example for practice  
+Getting the Puzzle  
+You can download the warm -up puzzle using wget.  
+ 
+$ wget 
+http://www.cs.ucy.ac.cy/~mylonasy/EPL326/quiz/warmup/warmup.tar.gz 
+ 
+Uncompress the puzzle:  
+ 
+$ tar -xzvf warmup.tar.gz 
+Solving the puzzle  
+The puzzle has the following files:  
+ 
+details_file.txt 
+hash.txt 
+problem_file.enc private.pem 
+encryptedKeyAES.txt 
+ 
+Your mission is to decrypt problem_file.enc , but for this you need to solve other steps first. You 
+should start working on the details_file.txt , which will lead you to the next steps. All files are 
+useful, but their actual purpose will be revealed to you in a step -by-step fashion. You will also 
+need to use your knowledge so far from the course in order to make guesses. Some steps are not straight forward and may need several trials in order to reach a correct conclusion.  
+ 
+For some steps you will need an ID. For the warm -up puzzle, all students will use the same ID  
+(this is NOT  your actual university ID). The actual quiz will be personalized and generated based 
+on your own ID.  
+For the warm -up, use the shared ID:  123456  
+ Each time you solve a step, you reveal a secret token. Sometimes the token is visible to you, 
+sometimes it’s not. You should understand when you have revealed a new token by their size.  
+ Token 1: 5 characters  
+Token 2: 8- 10 characters  
+Token 3: 10 characters  
+Token 4: 104 characters  
+ 
+ 

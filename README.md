@@ -98,15 +98,30 @@ python3 solve_group_e.py <folder_path>
 - **Smart Decryption**: Uses word-scoring and file signatures to decide between RSA and Symmetric decryption for the final `problem_file.enc`.
 - **Integrated Cracking**: Automatically performs Caesar and Vigenere brute-forcing on the final result to reveal Token 4.
 
-## Update: March 6, 2026 Quiz (OpenSSL 3 Compatibility)
-During the quiz on March 6, 2026, we discovered that `problem_file.enc` was encrypted with RC4 without a `Salted__` magic magic number, and required the legacy RC4 provider in OpenSSL 3.
+## Update: March 6, 2026 Quiz (Group C - ID 1071316)
+The Group C variation for ID `1071316` introduced a specific sequence:
+1. **Details:** Base64 encoded hints: `sha512`, `rc4`, `rsa`, `cbc`, `pbkdf2`, `caesar`.
+2. **Passphrase (Token 1):** `06221071316` (Cracked via SHA-512).
+3. **Private Key (Token 2):** Decrypted from `private_key.enc` using **RC4** with the passphrase (Token 1) and **no salt**. 
+   - *Note:* The key length was **1670 characters** for this ID.
+4. **Token 3 (AES/Symmetric Key):** Extracted by RSA-decrypting `aes_key.enc` using the private key.
+   - Result: `6269391303`
+5. **Token 4 (Final):** Decrypting `problem_file.enc` with Token 3 using **AES-256-CBC** with **PBKDF2**, followed by a **Caesar shift of 11**.
+   - Result: `jeypcrwzci`
 
-If you are using a modern machine (Ubuntu 22.04+ / OpenSSL 3+), standard RC4 decryption fails with a `bad magic number` or `unsupported` algorithm error.
+### Similarity Analysis & Variations Matrix
 
-To decrypt the final problem file in this format, you must use the legacy provider and `-nosalt` flags:
-```bash
-openssl enc -d -rc4 -provider legacy -provider default -nosalt -in problem_file.enc -pass pass:<RC4_KEY>
-```
-*Note: The `solve_group_e.py` script has been updated to automatically try these flags behind the scenes.*
+| Feature | Group E (Previous) | Group C (1071316) | Standard (Old) |
+|---------|-------------------|-------------------|----------------|
+| **Passphrase Hash** | SHA-256 / SHA-512 | SHA-512 | SHA-256 |
+| **Private Key Dec** | AES-256-CBC / RSA | **RC4 (No Salt)** | openssl rsa (direct) |
+| **Intermediate Key** | RC4 (from RSA) | **AES (from RSA)** | Direct Problem File |
+| **Problem Dec** | RC4 / AES-CBC | **AES-256-CBC (PBKDF2)** | AES-256-CBC |
+| **Final Cipher** | Caesar / Vigenere | **Caesar (Shift 11)** | Vigenere |
 
-The final token for this date used a **Double Caesar** shift (e.g., shifting the plaintext by 10/16 positions to find an English sentence).
+**Key Takeaways for Future Quizzes:**
+- **Clue Discovery:** Always Base64-decode `details.txt` first; it contains the algorithm roadmap.
+- **OpenSSL 3 Legacy:** RC4 and some older ciphers REQUIRE `-provider legacy -provider default`.
+- **Salt Detection:** If `od -c <file> | head` shows no `Salted__` magic number, you MUST use the `-nosalt` flag in OpenSSL.
+- **Dynamic Key Chain:** The relationship between Token 1-4 is fluid. Sometimes Token 1 unlocks the private key, sometimes it's Token 2. Always follow the `details.txt` breadcrumbs.
+

@@ -1,0 +1,15 @@
+# Final Extracted Tokens (ID: 1071254)
+
+- **Token 1 (11 chars)** [Passphrase from SHA-256 Hash]: `10712547088`
+- **Token 2 (10 digits)** [AES Key from AES_key.enc via RC4]: `9546535265`
+- **Token 3 (9 digits)**: *Not found in this specific quiz variation.*
+- **Token 4 (10 chars)** [Final text from Problem File - Vigenere shift]: `wzwcriiika` (or possibly `xc` depending on interpretation)
+
+**Explanation:**
+1. Passphrase hash matched `10712547088` (SHA-256).
+2. Found `AES_key.enc` instead of a ZIP file or `RC4_key.enc`. Decrypted `AES_key.enc` using RC4 with the legacy/nosalt OpenSSL 3 flags and the passphrase, which gave the AES key: `9546535265`.
+3. Decrypted `private_key.enc` using AES-256-CBC PBKDF2 with the recovered AES key.
+4. Unlocked `problem_file.enc` with the decrypted RSA private key, giving the ciphertext:
+`zqkiocqwicqklpp alw pwzebuphrnia pqixbf qjb rrbwnb veg ckkci vlmbp fu tbteokfkhc`
+5. The hints in `details.txt` specified "vigenere". Running a Vigenere solver over the text yielded a score of 4 with the key `xc`. The decoded text is:
+`congratulations you successfully solved the puzzle the final token is wzwcriiika`
